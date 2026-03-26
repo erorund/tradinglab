@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hvorfor jeg startet TradingLab – Erik | TradingLab</title>
+  <meta name="description" content="En ærlig fortelling om hvorfor jeg startet TradingLab, hva jeg håper å lære om algoritmisk trading med AI, og hva du kan forvente å finne her." />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0e17;
+      --surface: #111827;
+      --border: #1e2d40;
+      --accent: #00e5ff;
+      --accent2: #ff6b35;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --green: #22c55e;
+      --red: #ef4444;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Lora', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: rgba(10,14,23,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--accent2); }
+
+    nav a.back {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a.back:hover { color: var(--accent); }
+
+    .article-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 8rem 2rem 6rem;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards 0.1s;
+    }
+
+    .tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .date, .read-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    .ingress {
+      font-size: 1.15rem;
+      line-height: 1.75;
+      color: #94a3b8;
+      font-style: italic;
+      border-left: 3px solid var(--accent);
+      padding-left: 1.2rem;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
+    }
+
+    .article-body {
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.4s;
+    }
+
+    .article-body p {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #cbd5e1;
+      margin-bottom: 1.7rem;
+    }
+
+    .article-body h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 3rem 0 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .article-body strong { color: var(--text); font-weight: 600; }
+    .article-body em { color: #94a3b8; }
+
+    .highlight-box {
+      background: rgba(0,229,255,0.05);
+      border: 1px solid rgba(0,229,255,0.2);
+      border-radius: 4px;
+      padding: 1.5rem 1.8rem;
+      margin: 2rem 0;
+    }
+    .highlight-box p {
+      margin: 0 !important;
+      color: #94a3b8 !important;
+      font-size: 0.95rem !important;
+      line-height: 1.7 !important;
+    }
+    .highlight-box .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .warning-box {
+      background: rgba(239,68,68,0.06);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 4px;
+      padding: 1.5rem 1.8rem;
+      margin: 2rem 0;
+    }
+    .warning-box p {
+      margin: 0 !important;
+      color: #fca5a5 !important;
+      font-size: 0.95rem !important;
+      line-height: 1.7 !important;
+    }
+    .warning-box .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .spec-list {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.2rem 1.8rem;
+      margin: 2rem 0;
+      list-style: none;
+    }
+    .spec-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .spec-list li:last-child { border-bottom: none; }
+    .spec-list .key {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .spec-list .val {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 2.5rem 0;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .divider span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .author-box {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin-top: 3rem;
+    }
+    .author-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.2rem;
+      color: var(--bg); flex-shrink: 0;
+    }
+    .author-info p {
+      font-size: 0.85rem !important;
+      color: var(--muted) !important;
+      margin: 0 !important;
+      line-height: 1.5 !important;
+    }
+    .author-info strong {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .next-post {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      border-radius: 4px;
+      padding: 1.5rem 1.8rem;
+      margin-top: 2rem;
+    }
+    .next-post .next-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .next-post h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .next-post p {
+      font-size: 0.9rem !important;
+      color: var(--muted) !important;
+      margin: 0 !important;
+      line-height: 1.6 !important;
+    }
+
+    .post-nav {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .post-nav a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .post-nav a:hover { color: var(--accent); }
+
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.2rem; }
+      .article-wrap { padding: 6rem 1.2rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Trading<span>Lab</span></a>
+  <a href="index.html" class="back">← Tilbake til forsiden</a>
+</nav>
+
+<div class="article-wrap">
+
+  <div class="meta">
+    <span class="tag">Introduksjon</span>
+    <span class="date">26. mars 2026</span>
+    <span class="read-time">· 6 min lesing</span>
+  </div>
+
+  <h1>Hvorfor jeg startet TradingLab – og hva jeg håper å lære</h1>
+
+  <p class="ingress">
+    Dette er ikke en side drevet av eksperter. Det er en åpen loggbok fra en nysgjerrig person som vil forstå hvordan algoritmisk trading og AI faktisk fungerer – med ekte penger, ærlige resultater, og ingen skjulte agendaer.
+  </p>
+
+  <div class="article-body">
+
+    <h2>Bakgrunn</h2>
+    <p>
+      Jeg heter Erik, og jeg er ikke finansanalytiker, trader eller programmerer av yrke. Jeg er derimot genuint nysgjerrig på hva som skjer i skjæringspunktet mellom kunstig intelligens og finansmarkedene – og jeg er lei av å bare lese om det. Jeg vil forstå det innenfra.
+    </p>
+    <p>
+      For noen uker siden bestemte jeg meg for å sette opp et faktisk system. Ikke bare lese artikler og se YouTube-videoer, men faktisk installere programvare, konfigurere en tradingbot og sette inn ekte kapital. Resultatet er det du ser her: TradingLab.
+    </p>
+
+    <h2>Hvorfor dele det åpent?</h2>
+    <p>
+      Internett er fullt av innhold om trading, AI og automatisering. Veldig fullt. Og likevel sitter mange igjen med den samme følelsen jeg hadde: det er enten for generisk, for dyrt, eller så pakkes det inn i et kurs bak en knapp som sier «send meg DM for gratis oppsett».
+    </p>
+    <p>
+      Jeg har testet slike oppsett. Noen er brukbare, men de fleste er enten veldig generiske eller så komplekse at de forutsetter at du allerede kan det du prøver å lære. Det finnes forbausende lite ærlig, norskspråklig innhold som faktisk viser reisen fra null – med de feilene og omveiene det innebærer.
+    </p>
+    <p>
+      Det er det jeg ønsker å bidra med her. Ikke en fasit. Ikke et kurs. Bare en åpen loggbok fra én person som prøver seg frem – og som tror at andre kan ha nytte av å følge med, nettopp fordi det ikke er pyntet på.
+    </p>
+
+    <div class="highlight-box">
+      <span class="label">Tanken bak TradingLab</span>
+      <p>Kunnskap om AI og algoritmisk trading bør ikke være forbeholdt de som allerede kan det. Målet her er å gjøre terskelen lavere – ikke ved å forenkle bort det vanskelige, men ved å vise at det faktisk er mulig å lære underveis, med begrenset utstyr og begrenset kapital.</p>
+    </div>
+
+    <h2>Oppsettet – enkelt og ærlig</h2>
+    <p>
+      Jeg bruker ikke kraftig serverpark eller dyr maskinvare. Utgangspunktet er en gammel jobbmaskin fra 2015 som ellers ville samlet støv i en skuff.
+    </p>
+
+    <ul class="spec-list">
+      <li><span class="key">Maskin</span><span class="val">Lenovo Yoga (2015)</span></li>
+      <li><span class="key">Prosessor</span><span class="val">Intel i5 · 2,4 GHz</span></li>
+      <li><span class="key">RAM</span><span class="val">8 GB DDR3</span></li>
+      <li><span class="key">Lagring</span><span class="val">256 GB SSD</span></li>
+      <li><span class="key">OS</span><span class="val">Ubuntu 24.04 LTS</span></li>
+      <li><span class="key">Tradingbot</span><span class="val">Freqtrade (open source)</span></li>
+      <li><span class="key">Startkapital</span><span class="val">5 000 NOK</span></li>
+    </ul>
+
+    <p>
+      Maskinen er dedikert utelukkende til dette prosjektet. Ingen andre tjenester, ingen personlig data, ingen innlogginger som ikke er direkte nødvendige. Det er et bevisst valg – og det henger tett sammen med neste punkt.
+    </p>
+
+    <h2>Om sikkerhet – og hvorfor det ikke kan ignoreres</h2>
+    <p>
+      En av de første tingene jeg lærte da jeg begynte å sette meg inn i OpenClaw, var at verktøyet er kraftig – og at den kraften kan brukes mot deg hvis du ikke er forsiktig.
+    </p>
+    <p>
+      Cisco publiserte nylig en grundig sikkerhetsanalyse av OpenClaw og ClawHub, markedsplassen der skills – tilleggsmoduler til OpenClaw – lastes ned og deles. Funnene var alvorlige: én av de mest nedlastede skillsene på plattformen viste seg å fungere som ren skadevare. Den sendte data stille til en ekstern server kontrollert av skill-forfatteren, uten at brukeren fikk noen beskjed. I tillegg inneholdt den instruksjoner som tvang OpenClaw til å omgå sine egne sikkerhetsregler.
+    </p>
+
+    <div class="warning-box">
+      <span class="label">⚠ Cisco-funn · januar 2026</span>
+      <p>Cisco testet en av ClawHubs mest populære skills og fant ni sikkerhetsproblemer – to kritiske. Skillen utførte stille dataeksfiltrering til en ekstern server og brukte prompt injection for å omgå OpenClaws egne sikkerhetsregler. Den hadde blitt lastet ned tusenvis av ganger før den ble oppdaget. En bredere analyse av over 31 000 skills viste at 26 prosent inneholdt minst én sårbarhet.</p>
+    </div>
+
+    <p>
+      Dette er ikke en grunn til å la være å bruke OpenClaw. Det er en grunn til å bruke det med åpne øyne. Min tilnærming er å sandboxe installasjonen, ikke gi den tilgang til credentials eller personlige data, og å utvikle egne skills fremfor å laste ned ferdige fra ClawHub. Det tar lengre tid, men det er den eneste måten jeg stoler på oppsettet mitt på.
+    </p>
+    <p>
+      Hele sikkerhetsoppsettet mitt – hva jeg gjør, hvorfor, og hvilke avveininger jeg tar – vil bli dokumentert her på TradingLab. Det er et tema det er for lite åpen diskusjon om, særlig for vanlige brukere som ikke har en sikkerhetsbakgrunn.
+    </p>
+
+    <h2>Filosofien bak prosjektet</h2>
+    <p>
+      De 5 000 kronene betrakter jeg som tapt kapital fra dag én. Det er ikke et mål å bli rik – det er et mål å lære. Hvis boten over tid tjener nok til å oppgradere maskinvaren, er det en bonus. Hvis ikke, har jeg lært noe verdifullt om algoritmisk trading, AI-agenter og sikkerhet.
+    </p>
+    <p>
+      <strong>TradingLab er ikke en get-rich-quick side.</strong> Du finner ikke her lovnader om passiv inntekt, magiske strategier eller ferdige oppsett du bare kan kopiere. Det jeg forhåpentligvis kan tilby, er et ærlig bilde av hva som faktisk skjer når én person setter seg ned og prøver å bygge noe fra bunnen av – med begrenset kunnskap, begrenset kapital og begrenset tid. Jeg lærer underveis jeg også, og det vil synes.
+    </p>
+    <p>
+      Hvis det kan senke terskelen for andre som sitter med de samme spørsmålene – og gjøre at noen slipper å bruke måneder på å finne ut av ting jeg allerede har støtt på – da er dette verdt det.
+    </p>
+
+    <h2>Hva du kan forvente fremover</h2>
+    <p>
+      TradingLab vil inneholde jevnlige oppdateringer om hvordan systemet utvikler seg, guider om verktøyene jeg bruker, og ærlige tall om resultater – gode som dårlige. Jeg vil skrive om sikkerhet, om tekniske indikatorer som RSI, om hvordan jeg tenker rundt strategi, og om de tekniske valgene jeg tar underveis.
+    </p>
+    <p>
+      Neste post handler om selve installasjonen av OpenClaw – sikkerhetstiltakene jeg velger, hvordan jeg sandboxer oppsettet, og hva jeg tenker om veien videre derfra. Kom gjerne tilbake.
+    </p>
+
+    <p><em>– Erik</em></p>
+
+    <div class="divider"><span>// neste post</span></div>
+
+    <div class="next-post">
+      <span class="next-label">Kommer snart</span>
+      <h3>OpenClaw: Oppsett, sikkerhetstiltak og første inntrykk</h3>
+      <p>Installasjon av OpenClaw på Lenovo-maskinen – hvilke sikkerhetstiltak jeg implementerer, hvorfor jeg sandboxer installasjonen, og hva jeg tenker om veien videre.</p>
+    </div>
+
+  </div>
+
+  <div class="author-box">
+    <div class="author-avatar">E</div>
+    <div class="author-info">
+      <p><strong>Erik</strong>Grunnlegger av TradingLab · Nysgjerrig på AI og algoritmisk trading · Deler reisen åpent, feil og alt.</p>
+    </div>
+  </div>
+
+  <div class="post-nav">
+    <a href="index.html">Tilbake til forsiden →</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 TradingLab · <a href="mailto:hei@tradinglab.no">hei@tradinglab.no</a></p>
+  <p>Ikke finansiell rådgivning · Bygget åpent</p>
+</footer>
+
+</body>
+</html>
