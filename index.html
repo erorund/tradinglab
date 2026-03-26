@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TradingLab – AI-drevet handel, åpent og ærlig</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0e17;
+      --surface: #111827;
+      --border: #1e2d40;
+      --accent: #00e5ff;
+      --accent2: #ff6b35;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --green: #22c55e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: rgba(10,14,23,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--accent2); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav ul a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav ul a:hover { color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 2.5rem 4rem;
+      max-width: 900px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    .tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.4s;
+    }
+
+    h1 .highlight { color: var(--accent); }
+    h1 .highlight2 { color: var(--accent2); }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.6s;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.8s;
+    }
+
+    .btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      padding: 0.85rem 1.8rem;
+      border-radius: 2px;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .btn-primary:hover {
+      background: #fff;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* Stats bar */
+    .stats {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      flex: 1;
+      min-width: 160px;
+      padding: 1.8rem 2.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Sections */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 3rem;
+    }
+
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 2.5rem 2rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -4px; top: 6px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .timeline-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-item h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-item p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Status badge */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--green);
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      margin-left: 0.8rem;
+      vertical-align: middle;
+    }
+
+    .status::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      nav ul { display: none; }
+      .hero { padding: 6rem 1.5rem 3rem; }
+      section { padding: 3rem 1.5rem; }
+      .stat { padding: 1.2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Trading<span>Lab</span></div>
+  <ul>
+    <li><a href="#om">Om</a></li>
+    <li><a href="#guider">Guider</a></li>
+    <li><a href="#oppsett">Mitt oppsett</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="tag">Åpen kildekode · Norsk · Under utvikling</div>
+  <h1>
+    Lær å trade<br/>
+    med <span class="highlight">AI</span> og<br/>
+    <span class="highlight2">egne bots</span>
+  </h1>
+  <p class="hero-desc">
+    TradingLab er et åpent prosjekt der jeg dokumenterer min reise fra nybegynner til algoritmisk trader – med ekte kapital, ekte feil og ærlige resultater.
+  </p>
+  <div class="cta-row">
+    <a href="#guider" class="btn btn-primary">Les guidene</a>
+    <a href="#oppsett" class="btn btn-secondary">Se mitt oppsett</a>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <span class="stat-value">5 000</span>
+    <span class="stat-label">NOK startkapital</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value">0</span>
+    <span class="stat-label">Dager live</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value">Freqtrade</span>
+    <span class="stat-label">Plattform</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value">Ubuntu</span>
+    <span class="stat-label">OS / Hardware</span>
+  </div>
+</div>
+
+<section id="om">
+  <div class="section-tag">// Hva er dette</div>
+  <h2>Et ærlig eksperiment <span class="status">Pågår</span></h2>
+  <p class="section-desc">
+    De fleste trading-sider selger deg drømmer. Denne siden gjør det motsatte – her dokumenterer jeg alt åpent: oppsett, strategier, tap og gevinster.
+  </p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h3>AI-drevet strategi</h3>
+      <p>Bruker OpenClaw og Freqtrade til å analysere markedet og justere strategier automatisk basert på nyheter og indikatorer.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔐</div>
+      <h3>Sikkerhet først</h3>
+      <p>Krypterte credentials, Telegram-varsler og emergency stops. Jeg lærer om sikkerhet mens jeg bygger.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📖</div>
+      <h3>Alt er åpent</h3>
+      <p>Guider, kode og resultater deles her – slik at andre kan lære av både suksessene og feilene mine.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📈</div>
+      <h3>Ekte tall</h3>
+      <p>5 000 NOK startkapital, betraktet som tapt fra dag én. Målet er at boten tjener nok til å oppgradere seg selv.</p>
+    </div>
+  </div>
+</section>
+
+<section id="oppsett">
+  <div class="section-tag">// Teknisk oppsett</div>
+  <h2>Maskinvare &amp; software</h2>
+  <p class="section-desc">
+    Alt kjører på en gammel Lenovo Yoga fra 2015. Bevis på at du ikke trenger dyrt utstyr for å komme i gang.
+  </p>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">Steg 01</div>
+      <h3>Hardware</h3>
+      <p>Lenovo Yoga 2015 · Intel i5 2,4GHz · 8GB DDR3 RAM · 256GB SSD</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Steg 02</div>
+      <h3>Operativsystem</h3>
+      <p>Ubuntu 24.04 LTS – rent oppsett, kun dedikert til trading og læring.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Steg 03</div>
+      <h3>Freqtrade</h3>
+      <p>Åpen kildekode trading bot – installert og konfigurert for kryptomarkedet.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Steg 04 – kommer</div>
+      <h3>OpenClaw AI</h3>
+      <p>AI-agent som analyserer nyheter og justerer strategier. Under oppsett.</p>
+    </div>
+  </div>
+</section>
+
+<section id="guider">
+  <div class="section-tag">// Guider</div>
+  <h2>Kommer snart</h2>
+  <p class="section-desc">
+    Guider om Freqtrade, RSI og tekniske indikatorer, sikkerhetsstacker og mye mer er under skriving. Kom tilbake snart!
+  </p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🔜</div>
+      <h3>Kom i gang med Freqtrade</h3>
+      <p>Steg-for-steg guide til installasjon og første strategi på Ubuntu.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔜</div>
+      <h3>RSI og tekniske indikatorer</h3>
+      <p>Hva betyr de egentlig, og hvordan bruker du dem i praksis?</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔜</div>
+      <h3>Sikkerhet for AI-agenter</h3>
+      <p>Hvordan beskytte credentials, sette opp emergency stops og monitorering.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 TradingLab · <a href="mailto:hei@tradinglab.no">hei@tradinglab.no</a></p>
+  <p>Bygget åpent · Ikke finansiell rådgivning</p>
+</footer>
+
+</body>
+</html>
